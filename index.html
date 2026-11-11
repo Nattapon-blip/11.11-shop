@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4d2d">
+<title>Shopee 11.11 Assistant</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:16px;color:#222}
+header{background:#ee4d2d;color:white;padding:22px;border-radius:18px}
+h1{font-size:23px;margin:0 0 8px}
+.card{background:white;padding:18px;border-radius:16px;margin-top:15px}
+h2{font-size:18px;margin-top:0}
+button{background:#ee4d2d;color:white;border:0;border-radius:10px;padding:12px;font-weight:bold}
+.product{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 0}
+.product+ .product{border-top:1px solid #eee}
+small{color:#777}
+input[type=number]{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;margin:8px 0 14px;font-size:16px}
+label{display:block;margin:10px 0}
+.timer{font-size:32px;font-weight:bold;margin:15px 0}
+.secondary{background:#fff0ec;color:#d93f22}
+</style>
+</head>
+<body>
+<header>
+<h1>🛍️ Shopee 11.11 Assistant</h1>
+เตรียมพร้อมก่อน Flash Sale
+</header>
+<section class="card">
+<h2>สินค้าที่ต้องการซื้อ</h2>
+<div class="product">
+<div><b>Xiaomi Monitor</b><br><small>สินค้าที่เล็งไว้</small></div>
+<button onclick="window.open('https://th.shp.ee/ctDvwHZJ','_blank')">เปิดสินค้า</button>
+</div>
+<div class="product">
+<div><b>Nintendo Switch 2</b><br><small>สินค้าที่เล็งไว้</small></div>
+<button onclick="window.open('https://th.shp.ee/4xXStXVe','_blank')">เปิดสินค้า</button>
+</div>
+</section>
+<section class="card">
+<h2>เช็กลิสต์ก่อนซื้อ</h2>
+<div id="checks">
+<label><input type="checkbox"> ตรวจสอบรุ่นและตัวเลือกสินค้า</label>
+<label><input type="checkbox"> ตรวจสอบร้านค้าและรีวิว</label>
+<label><input type="checkbox"> ตรวจสอบที่อยู่จัดส่ง</label>
+<label><input type="checkbox"> ตรวจสอบโค้ดส่วนลด</label>
+<label><input type="checkbox"> ตรวจสอบยอดสุทธิก่อนจ่าย</label>
+</div>
+</section>
+<section class="card">
+<h2>บันทึกราคาเป้าหมาย</h2>
+<label>Xiaomi Monitor (บาท)</label>
+<input id="monitor" type="number" placeholder="ราคาเป้าหมาย">
+<label>Nintendo Switch 2 (บาท)</label>
+<input id="switch" type="number" placeholder="ราคาเป้าหมาย">
+<button class="secondary" onclick="save()">บันทึกราคา</button>
+<p id="saved"></p>
+</section>
+<section class="card">
+<h2>ตัวจับเวลา</h2>
+<div class="timer" id="timer">00:00</div>
+<button onclick="start(60)">1 นาที</button>
+<button onclick="start(300)">5 นาที</button>
+<button class="secondary" onclick="stop()">หยุด</button>
+</section>
+<p style="text-align:center;color:#888;font-size:12px">การสั่งซื้อและชำระเงินต้องทำด้วยตัวเอง</p>
+<script>
+document.querySelectorAll('#checks input').forEach((e,i)=>{
+e.checked=localStorage.getItem('c'+i)==='1';
+e.onchange=()=>localStorage.setItem('c'+i,e.checked?'1':'0');
+});
+['monitor','switch'].forEach(id=>{
+document.getElementById(id).value=localStorage.getItem(id)||'';
+});
+function save(){
+['monitor','switch'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value));
+document.getElementById('saved').textContent='บันทึกแล้ว';
+}
+let timer=null,seconds=0;
+function show(){
+document.getElementById('timer').textContent=
+String(Math.floor(seconds/60)).padStart(2,'0')+':'+
+String(seconds%60).padStart(2,'0');
+}
+function start(n){
+stop();seconds=n;show();
+timer=setInterval(()=>{
+seconds--;show();
+if(seconds<=0){stop();alert('หมดเวลาแล้ว!');}
+},1000);
+}
+function stop(){if(timer)clearInterval(timer);timer=null;}
+</script>
+</body>
+</html>
